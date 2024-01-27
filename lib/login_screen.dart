@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/auth_bloc.dart';
 import 'widgets/gradient_button.dart';
 import 'widgets/login_field.dart';
 import 'widgets/social_button.dart';
@@ -58,7 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             GradientButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<AuthBloc>().add(
+                      AuthLoginButtonPressed(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      ),
+                    );
+              },
             ),
           ],
         ),
