@@ -9,3 +9,5 @@ final class AuthLoginButtonPressed extends AuthEvent {
 
   AuthLoginButtonPressed({required this.email, required this.password});
 }
+
+final class AuthLogoutButtonPressed extends AuthEvent {}

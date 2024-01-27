@@ -4,9 +4,11 @@ import '../pallete.dart';
 
 class GradientButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final String title;
   const GradientButton({
     Key? key,
     required this.onPressed,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -31,9 +33,9 @@ class GradientButton extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
         ),
-        child: const Text(
-          'Sign in',
-          style: TextStyle(
+        child:  Text(
+          title,
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 17,
           ),
