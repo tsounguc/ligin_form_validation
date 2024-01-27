@@ -6,38 +6,57 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
-    on<AuthLoginButtonPressed>((event, emit) async {
-      try {
-        final email = event.email;
-        final password = event.password;
+    on<AuthLoginButtonPressed>(_onAuthLoginRequested);
 
-        if (password.length < 6) {
-          return emit(AuthFailure('Password cannot be less than 6 characters'));
-        }
+    on<AuthLogoutButtonPressed>(_onAuthLogoutRequested);
+  }
 
-        await Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            return emit(AuthSuccess(uid: '$email-$password'));
-          },
-        );
-      } catch (e) {
-        return emit(AuthFailure(e.toString()));
+  @override
+  void onChange(Change<AuthState> change) {
+    super.onChange(change);
+    debugPrint('AuthBloc - $change');
+  }
+
+  @override
+  void onTransition(Transition<AuthEvent, AuthState> transition) {
+    super.onTransition(transition);
+    debugPrint('AuthBloc - $transition');
+  }
+
+  void _onAuthLoginRequested(
+      AuthLoginButtonPressed event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final email = event.email;
+      final password = event.password;
+
+      if (password.length < 6) {
+        return emit(AuthFailure('Password cannot be less than 6 characters'));
       }
-    });
 
-    on<AuthLogoutButtonPressed>((event, emit) async {
-      emit(AuthLoading());
-      try {
-        await Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            return emit(AuthInitial());
-          },
-        );
-      } catch (e) {
-        return emit(AuthFailure(e.toString()));
-      }
-    });
+      await Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          return emit(AuthSuccess(uid: '$email-$password'));
+        },
+      );
+    } catch (e) {
+      return emit(AuthFailure(e.toString()));
+    }
+  }
+
+  void _onAuthLogoutRequested(
+      AuthLogoutButtonPressed event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          return emit(AuthInitial());
+        },
+      );
+    } catch (e) {
+      return emit(AuthFailure(e.toString()));
+    }
   }
 }
